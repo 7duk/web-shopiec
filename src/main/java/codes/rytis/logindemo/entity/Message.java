@@ -3,6 +3,7 @@ package codes.rytis.logindemo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Builder
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Message {
+public class Message implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

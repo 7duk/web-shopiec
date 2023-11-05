@@ -1,10 +1,11 @@
 package codes.rytis.logindemo.service;
 
-import codes.rytis.logindemo.dto.MessageRequest;
-import codes.rytis.logindemo.dto.Response;
+import codes.rytis.logindemo.dto.message.MessageDto;
+import codes.rytis.logindemo.dto.response.Response;
 import codes.rytis.logindemo.entity.Message;
 import codes.rytis.logindemo.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,21 +20,30 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MessageService {
     private final MessageRepository repository;
+    private final ModelMapper mapper;
 
-    public ResponseEntity<?> saveMessages(List<MessageRequest> messageRequests) {
-        System.out.println(messageRequests.get(0));
-        List<Message> messages = messageRequests.stream().map(e -> {
-            Message mes = new Message(e.getMessage(), LocalDateTime.parse(e.getTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), e.getSenderId(), e.getChatId());
-            System.out.println(mes.toString());
-            return mes;
-        }).toList();
+    public ResponseEntity<?> saveMessages(List<MessageDto> messageDtos) {
+        System.out.println(messageDtos.get(0));
         try {
+            List<Message> messages = messageDtos.stream().map(e -> {
+                Message mes = new Message().builder().time(LocalDateTime.parse(e.getTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))).build();
+                mapper.map(e, mes);
+                return mes;
+            }).toList();
             repository.saveAll(messages);
-            return new ResponseEntity<>(messages, HttpStatus.OK);
+            return new ResponseEntity<>(new Response().builder().message("INSERT MESSAGES SUCCESS").build(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.FOUND);
         }
+    }
 
-
+    public ResponseEntity<?> getMessageFromChat(Integer cId) {
+        List<Message> messages = repository.findAllByChatId(cId);
+        List<MessageDto> messageDtos = messages.stream().map(e -> {
+            MessageDto messageDto = new MessageDto().builder().chatId(e.getChatId()).senderId(e.getSenderId()).build();
+            mapper.map(e, messageDto);
+            return messageDto;
+        }).toList();
+        return new ResponseEntity<>(messageDtos, HttpStatus.OK);
     }
 }

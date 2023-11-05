@@ -1,60 +1,66 @@
 package codes.rytis.logindemo.service;
 
-import codes.rytis.logindemo.dto.ChatRequest;
-import codes.rytis.logindemo.dto.MessageRequest;
-import codes.rytis.logindemo.dto.Response;
+import codes.rytis.logindemo.dto.response.Response;
+import codes.rytis.logindemo.dto.chat.ChatDto;
+import codes.rytis.logindemo.dto.message.MessageDto;
+import codes.rytis.logindemo.dto.participant.ParticipantDto;
 import codes.rytis.logindemo.entity.Chat;
 import codes.rytis.logindemo.entity.Message;
-import codes.rytis.logindemo.entity.User;
 import codes.rytis.logindemo.repository.ChatRepository;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.UnexpectedRollbackException;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ChatService {
     private final ChatRepository repository;
-    public Chat findChatByPARTICIPANT(ChatRequest request) {
-        Optional<Chat> chat= repository.findChatByPARTICIPANT(request.getParticipant_1(), request.getParticipant_2());
-        if(!chat.isEmpty()){
-                return new Chat().builder().participantId1(chat.get().getParticipantId1())
-                        .participantId2(chat.get().getParticipantId2())
-                        .id(chat.get().getId())
-                        .participaint2(new User(chat.get().getParticipaint2().getFirstName(),
-                                chat.get().getParticipaint2().getLastName(),
-                                chat.get().getParticipaint2().getGender(),
-                                chat.get().getParticipaint2().getRoleId(),
-                                chat.get().getParticipaint2().getImage()))
-                        .messages(chat.get().getMessages().stream()
-                                .map(t->{Message mes = new Message(t.getMessage(),
-                                        t.getTime(),
-                                        t.getSenderId(),
-                                        t.getChatId());
-                                    mes.setId(t.getId()); return mes;})
-                                .toList()).build();
-        }
-        return null;
-    }
+    private final ModelMapper mapper;
 
-    public List<Chat> findAll() {
+    public Integer findChatByPARTICIPANT(ChatDto request){
+        try{
+            Integer chat = repository.findChatIdByParticipaint(request.getParticipantId1(), request.getParticipantId2());
+            return chat;
+        }
+        catch (Exception e){
+            return  null;
+        }
+    }
+    public List<ChatDto> findAll() {
         List<Chat> chats = repository.findAll();
         return chats.stream().map(e -> {
-            return new Chat().builder().participantId1(e.getParticipantId1()).participantId2(e.getParticipantId2()).id(e.getId()).participaint2(new User(e.getParticipaint2().getFirstName(), e.getParticipaint2().getLastName(),e.getParticipaint2().getGender(),e.getParticipaint2().getRoleId(),e.getParticipaint2().getImage())).messages(e.getMessages().stream().map(t->{Message mes = new Message(t.getMessage(),t.getTime(),t.getSenderId(),t.getChatId()); mes.setId(t.getId()); return mes;}).toList()).build();
+            System.out.println("1");
+            ChatDto chatDto = mapper.map(e, ChatDto.class);
+            System.out.println("2");
+            Message message = e.getMessages().size() > 0 ? e.getMessages().get(e.getMessages().size() - 1) : null;
+            System.out.println("3");
+            ParticipantDto participantDto = new ParticipantDto().builder()
+                    .name(e.getParticipaint2().getFirstName() + " " + e.getParticipaint2().getLastName())
+                    .image(e.getParticipaint2().getImage()).build();
+            MessageDto messageDto = message == null ? null : new MessageDto().builder()
+                    .id(message.getId())
+                    .message(message.getMessage())
+                    .time(message.getTime().toString())
+                    .chatId(message.getChatId())
+                    .senderId(message.getSenderId()).build();
+            System.out.println("4");
+            chatDto.setMessages(messageDto);
+            chatDto.setParticipant(participantDto);
+            System.out.println("5");
+            return chatDto;
         }).toList();
     }
-
     @Transactional
-    public int saveChat(ChatRequest request){
-            return repository.saveChat(request.getParticipant_1(), request.getParticipant_2());
+    public ResponseEntity<?> saveChat(ChatDto request) {
+        Integer value = repository.saveChat(request.getParticipantId1(), request.getParticipantId2());
+        if(value ==1){
+            return new ResponseEntity<>(new Response().builder().message("INSERT CHAT SUCCESS").build(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>( HttpStatus.FOUND);
     }
 }

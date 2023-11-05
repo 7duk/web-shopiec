@@ -15,7 +15,7 @@ public interface ChatRepository extends JpaRepository<Chat,Long> {
     @Modifying
     @Query(value = "INSERT INTO chat (PARTICIPANTL_1,PARTICIPANTL_2) VALUES(:param1,:param2) ",nativeQuery = true)
     int saveChat(@Param("param1")Integer PARTICIPANTL_1, @Param("param2") Integer PARTICIPANTL_2);
-    @Query(value = "SELECT * FROM chat WHERE chat.PARTICIPANTL_2 = :param2  AND  chat.PARTICIPANTL_1 =:param1",nativeQuery = true)
-    Optional<Chat> findChatByPARTICIPANT(@Param("param1") Integer PARTICIPANTL_1,@Param("param2") Integer PARTICIPANTL_2);
+    @Query(value = "SELECT id FROM chat WHERE chat.PARTICIPANTL_2 = :param2  AND  chat.PARTICIPANTL_1 =:param1",nativeQuery = true)
+    Integer findChatIdByParticipaint(@Param("param1") Integer PARTICIPANTL_1,@Param("param2") Integer PARTICIPANTL_2);
 
 }

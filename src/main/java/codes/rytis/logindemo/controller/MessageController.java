@@ -1,20 +1,15 @@
 package codes.rytis.logindemo.controller;
 
-import codes.rytis.logindemo.dto.ChatRequest;
-import codes.rytis.logindemo.dto.MessageRequest;
-import codes.rytis.logindemo.dto.Response;
-import codes.rytis.logindemo.service.ChatService;
+import codes.rytis.logindemo.dto.message.MessageDto;
 import codes.rytis.logindemo.service.MessageService;
+import codes.rytis.logindemo.utils.DataTypeUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,9 +20,8 @@ public class MessageController {
     private SimpMessagingTemplate simpMessagingTemplate;
 
     private final MessageService service;
-
     @MessageMapping("/chat/{to}")
-    public void sendMessage(@DestinationVariable String to, MessageRequest message) {
+    public void sendMessage(@DestinationVariable String to, MessageDto message) {
         System.out.println("mess:" + message);
         try {
             simpMessagingTemplate.convertAndSend("/topic/messages/" + to, message);
@@ -37,8 +31,12 @@ public class MessageController {
     }
 
     @PostMapping("message/messages-insert")
-    public ResponseEntity<?> saveMessages(@RequestBody List<MessageRequest> request){
+    public ResponseEntity<?> saveMessages(@RequestBody List<MessageDto> request){
         return service.saveMessages(request);
+    }
+    @GetMapping("/message/messages")
+    public ResponseEntity<?> getMessagesFromChat(@RequestParam(name = "cId") String cId){
+        return  service.getMessageFromChat(DataTypeUtils.ConvertStringToInt(cId));
     }
 }
 

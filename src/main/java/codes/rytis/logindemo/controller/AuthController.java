@@ -1,7 +1,7 @@
 package codes.rytis.logindemo.controller;
 
-import codes.rytis.logindemo.dto.LoginRequest;
-import codes.rytis.logindemo.dto.LoginResponse;
+import codes.rytis.logindemo.dto.login.LoginDto;
+import codes.rytis.logindemo.dto.token.TokenDto;
 import codes.rytis.logindemo.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -17,7 +17,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody @Validated LoginRequest request) {
+    public TokenDto login(@RequestBody @Validated LoginDto request) {
         return authService.attemptLogin(request.getEmail(), request.getPassword());
     }
 

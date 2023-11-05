@@ -1,7 +1,6 @@
 package codes.rytis.logindemo.controller;
 
-import codes.rytis.logindemo.dto.RegisterRequest;
-import codes.rytis.logindemo.dto.Response;
+import codes.rytis.logindemo.dto.user.UserRegisterDto;
 import codes.rytis.logindemo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
     @PostMapping("/register")
-    public ResponseEntity<Response> register(@RequestBody @Validated RegisterRequest request){
+    public ResponseEntity<?> register(@RequestBody @Validated UserRegisterDto request){
         System.out.println(request.toString());
          return  userService.registerUser(request);
     }

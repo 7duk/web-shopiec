@@ -3,6 +3,7 @@ package codes.rytis.logindemo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.sql.Blob;
 import java.time.LocalDate;
 
@@ -16,7 +17,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -44,13 +45,5 @@ public class User {
     @Column(name = "IS_DELETE")
     private Boolean isDelete;
     @Column(name = "IMAGE")
-    private byte[] image;
-    public User(String firstName,String lastName,Integer gender,Integer roleId,byte[] image){
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.gender = gender;
-        this.roleId = roleId;
-        this.image = image;
-    }
-
+    private String image;
 }

@@ -1,8 +1,8 @@
 package codes.rytis.logindemo.service;
 
+import codes.rytis.logindemo.dto.response.Response;
 import codes.rytis.logindemo.entity.User;
-import codes.rytis.logindemo.dto.RegisterRequest;
-import codes.rytis.logindemo.dto.Response;
+import codes.rytis.logindemo.dto.user.UserRegisterDto;
 import codes.rytis.logindemo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class UserService {
         return repository.findUserByEmail(email);
     }
     @Transactional
-    public ResponseEntity<Response> registerUser(RegisterRequest request) {
+    public ResponseEntity<?> registerUser(UserRegisterDto request) {
         Optional<User> users   = findUserByEmail(request.getEmail());
         if(!users.isEmpty()){
             return ResponseEntity.ok().body(Response.builder().message("EMAIL IS ALREADY EXIST").build());
@@ -38,6 +38,6 @@ public class UserService {
                 request.getEmail(),
                 request.getPassword(),
                 1);
-        return ResponseEntity.ok().body(Response.builder().message("SUCCESS").build());
+        return ResponseEntity.ok().body(Response.builder().message("REGISTER USER SUCCESS").build());
     }
 }
