@@ -22,6 +22,14 @@ public class WebSecurityConfig {
     private final CustomUserDetailService customUserDetailService;
     private final UnauthorizedHandler unauthorizedHandler;
 
+    private static final String[] SWAGGER_URLS = {
+// -- swagger ui
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/v2/api-docs",
+            "/webjars/**"
+    };
+
     @Bean
     public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -35,6 +43,7 @@ public class WebSecurityConfig {
             .securityMatcher("/**")
             .authorizeHttpRequests(registry -> registry
                     .requestMatchers("/").permitAll()
+                    .requestMatchers(SWAGGER_URLS).permitAll()
                     .requestMatchers("/chat/**").permitAll()
                     .requestMatchers("/public/**").permitAll()
                     .requestMatchers("/auth/login").permitAll()

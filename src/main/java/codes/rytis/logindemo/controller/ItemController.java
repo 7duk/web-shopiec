@@ -38,4 +38,8 @@ public class ItemController {
     public ResponseEntity<?> updateDescriptionItem(@RequestParam("itemId") String itemId ,@RequestBody ItemUpdateDto itemUpdateDto){
         return service.updateDescriptionItem(DataTypeUtils.ConvertStringToInt(itemId),itemUpdateDto);
     }
+    @GetMapping("/Id")
+    public ResponseEntity<?> getItemIdByName(@RequestParam("name") String name){
+        return service.getItemIdByName(name);
+    }
 }

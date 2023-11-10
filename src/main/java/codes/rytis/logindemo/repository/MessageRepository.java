@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-@Transactional
 public interface MessageRepository extends JpaRepository<Message,Integer> {
     List<Message> findAllByChatId(Integer cId);
 }

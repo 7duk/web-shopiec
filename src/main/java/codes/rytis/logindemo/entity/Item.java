@@ -43,4 +43,6 @@ public class Item implements Serializable {
     private LocalDateTime lastUpdateAt;
     @OneToMany(mappedBy = "item",fetch = FetchType.LAZY)
     private List<ImageItem> imagesItem;
+    @OneToMany(mappedBy = "items",fetch = FetchType.LAZY)
+    private List<ItemDetail> itemDetails;
 }

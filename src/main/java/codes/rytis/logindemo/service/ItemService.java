@@ -1,8 +1,10 @@
 package codes.rytis.logindemo.service;
 
 import codes.rytis.logindemo.dto.item.ItemDto;
+import codes.rytis.logindemo.dto.item.ItemIdDto;
 import codes.rytis.logindemo.dto.item.ItemSaveDto;
 import codes.rytis.logindemo.dto.item.ItemUpdateDto;
+import codes.rytis.logindemo.dto.itemdetail.ItemDetailDto;
 import codes.rytis.logindemo.dto.response.Response;
 import codes.rytis.logindemo.entity.Item;
 import codes.rytis.logindemo.repository.ItemRepository;
@@ -27,8 +29,12 @@ public class ItemService {
     public ResponseEntity<List<ItemDto>> getItemsByIgId(Integer igId) {
         List<Item> items = repository.getItemsByIgIdAndIsDelete(igId, 0);
         List<ItemDto> itemDtos = items.stream().map(e -> {
-            ItemDto itemDto = new ItemDto();
-            itemDto = mapper.map(e, ItemDto.class);
+            ItemDto itemDto = mapper.map(e, ItemDto.class);
+            itemDto.setItemDetails(e.getItemDetails().stream().map(i->{
+                ItemDetailDto itemDetailDto = mapper.map(i, ItemDetailDto.class);
+                itemDetailDto.setColorId(i.getColorId());
+                return itemDetailDto;
+            }).toList());
             return itemDto;
         }).toList();
         return new ResponseEntity<>(itemDtos, HttpStatus.OK);
@@ -75,5 +81,9 @@ public class ItemService {
             return new ResponseEntity<>(Response.builder().message("SUCCESS").build(), HttpStatus.OK);
         }
         return new ResponseEntity<>(Response.builder().message("ERROR"), HttpStatus.FOUND);
+    }
+    public ResponseEntity<ItemIdDto> getItemIdByName(String name){
+        Integer itemId = repository.getIdByName(name);
+        return new ResponseEntity<>(new ItemIdDto().builder().itemId(itemId).build(),HttpStatus.OK);
     }
 }

@@ -8,17 +8,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Table(name = "comment")
+@Table(name = "reply_comment")
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Comment  implements Serializable {
+public class ReplyComment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -26,8 +24,6 @@ public class Comment  implements Serializable {
     private String content;
     @Column(name = "CREATE_AT")
     private LocalDateTime time;
-    @Column(name = "RATING")
-    private Integer rating;
     @Column(name = "IS_CHECK")
     private Integer isCheck;
     @Column(name = "USER_ID")
@@ -35,12 +31,11 @@ public class Comment  implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID",insertable = false,updatable = false)
     private User user;
-    @Column(name = "ITEM_ID")
-    private Integer itemId;
+    @Column(name = "COMMENT_ID")
+    private Integer commentId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ITEM_ID",insertable = false,updatable = false)
-    private Item item;
-    @OneToMany(mappedBy = "comment",fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMMENT_ID",insertable = false,updatable = false)
     @JsonIgnore
-    private List<ReplyComment> replyComments;
+    private Comment comment;
+
 }

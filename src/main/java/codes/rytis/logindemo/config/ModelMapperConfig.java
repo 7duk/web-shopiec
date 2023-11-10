@@ -1,4 +1,4 @@
-package codes.rytis.logindemo.MMConfig;
+package codes.rytis.logindemo.config;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;

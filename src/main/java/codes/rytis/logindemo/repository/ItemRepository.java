@@ -38,4 +38,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
     @Modifying
     @Query(value = "UPDATE item  SET item.DESCRIPTION = :description,item.LAST_UPDATE_AT= :lastUpAt WHERE item.ID =:id",nativeQuery = true)
     int updateDescriptionItem(@Param("id") Integer itemId, @Param("description")String name,@Param("lastUpAt")LocalDateTime lastUpAt);
+
+    @Query(value = "SELECT ID FROM item WHERE item.NAME = :name",nativeQuery = true)
+    Integer getIdByName(@Param("name") String name);
 }

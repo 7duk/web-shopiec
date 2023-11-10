@@ -1,6 +1,10 @@
 package codes.rytis.logindemo.dto.item;
 
+import codes.rytis.logindemo.dto.color.ColorDto;
 import codes.rytis.logindemo.dto.imageitem.ImageItemDto;
+import codes.rytis.logindemo.dto.itemdetail.ItemDetailDto;
+import codes.rytis.logindemo.entity.Color;
+import codes.rytis.logindemo.entity.ItemDetail;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,4 +26,5 @@ public class ItemDto {
     private String description;
     private LocalDateTime lastUpdateAt;
     private List<ImageItemDto> imagesItem;
+    private List<ItemDetailDto> itemDetails;
 }
