@@ -41,7 +41,6 @@ public class ItemService {
     }
 
     public ResponseEntity<?> saveItem(ItemSaveDto itemSaveDto) {
-        System.out.println(itemSaveDto.toString());
         Item item = mapper.map(itemSaveDto, Item.class);
         item.setLastUpdateAt(LocalDateTime.parse(itemSaveDto.getLastUpdateAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         System.out.println(item.toString());

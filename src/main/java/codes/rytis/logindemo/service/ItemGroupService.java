@@ -41,7 +41,6 @@ public class ItemGroupService {
                 ItemDto itemDto = mapper.map(i, ItemDto.class);
                 List<ImageItemDto> imageIDtos = i.getImagesItem().stream().map(im->{
                     ImageItemDto imageIDto = mapper.map(im,ImageItemDto.class);
-                    System.out.println(itemDto.toString());
                     return imageIDto;
                 }).toList();
 //                itemDto.setImagesItem(imageIDtos);
