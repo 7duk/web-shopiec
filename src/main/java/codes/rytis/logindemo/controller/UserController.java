@@ -20,5 +20,7 @@ public class UserController {
         System.out.println(request.toString());
          return  userService.registerUser(request);
     }
+    //change password
+    //
 
 }

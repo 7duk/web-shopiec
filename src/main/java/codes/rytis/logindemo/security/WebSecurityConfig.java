@@ -24,9 +24,15 @@ public class WebSecurityConfig {
 
     private static final String[] SWAGGER_URLS = {
 // -- swagger ui
-            "/swagger-resources/**",
-            "/swagger-ui.html",
+//            "/swagger-resources/**",
+//            "/swagger-ui.html",
+//            "/v2/api-docs",
+//            "/webjars/**"
             "/v2/api-docs",
+            "/configuration/ui",
+            "/swagger-resources/**",
+            "/configuration/security",
+            "/swagger-ui.html",
             "/webjars/**"
     };
 
@@ -43,7 +49,8 @@ public class WebSecurityConfig {
             .securityMatcher("/**")
             .authorizeHttpRequests(registry -> registry
                     .requestMatchers("/").permitAll()
-                    .requestMatchers(SWAGGER_URLS).permitAll()
+//                    .requestMatchers(SWAGGER_URLS).permitAll()
+                    .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                     .requestMatchers("/chat/**").permitAll()
                     .requestMatchers("/public/**").permitAll()
                     .requestMatchers("/auth/login").permitAll()
