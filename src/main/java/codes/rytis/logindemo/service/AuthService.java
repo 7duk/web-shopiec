@@ -17,16 +17,21 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public TokenDto attemptLogin(String email, String password) {
+        System.out.println("11");
         var authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password)
         );
+        System.out.println("21");
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        System.out.println("31");
         var principal = (UserPrincipal) authentication.getPrincipal();
+        System.out.println("41");
         var token = jwtIssuer.issue(JwtIssuer.Request.builder()
                 .userId(principal.getUserId())
                 .email(principal.getEmail())
                 .roles(principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
                 .build());
+        System.out.println("TOKEN:" + token);
         return TokenDto.builder()
                 .token(token)
                 .build();

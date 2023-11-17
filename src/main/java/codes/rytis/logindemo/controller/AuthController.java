@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.swing.*;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -18,6 +20,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public TokenDto login(@RequestBody @Validated LoginDto request) {
+        System.out.println(request.toString());
         return authService.attemptLogin(request.getEmail(), request.getPassword());
     }
 

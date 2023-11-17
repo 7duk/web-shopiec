@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Table(name = "item_detail")
 @Entity
@@ -19,12 +20,14 @@ public class ItemDetail implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "AMOUNT")
-    private Integer amount;
     @Column(name = "ITEM_ID")
     private Integer itemId;
     @Column(name = "COLOR_ID")
     private Integer colorId;
+    @Column(name = "AMOUNT")
+    private Integer amount;
+    @OneToMany(mappedBy = "itemDetailIDI", fetch = FetchType.LAZY)
+    private List<OrderDetail> orderDetail;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ITEM_ID",insertable = false,updatable = false)
     @JsonIgnore
@@ -33,5 +36,4 @@ public class ItemDetail implements Serializable {
     @JoinColumn(name = "COLOR_ID",insertable = false,updatable = false)
     @JsonIgnore
     private Color color;
-
 }

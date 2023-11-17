@@ -1,5 +1,6 @@
 package codes.rytis.logindemo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Data
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,4 +48,8 @@ public class User implements Serializable {
     private Boolean isDelete;
     @Column(name = "IMAGE")
     private String image;
+
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "odder", fetch = FetchType.LAZY)
+//    @JoinColumn(name = "CUSTOMER_ID",insertable = false,updatable = false)
 }

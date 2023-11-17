@@ -1,3 +1,4 @@
+
 package codes.rytis.logindemo.security;
 
 import lombok.RequiredArgsConstructor;
@@ -24,10 +25,12 @@ public class WebSecurityConfig {
 
     private static final String[] SWAGGER_URLS = {
 // -- swagger ui
+
 //            "/swagger-resources/**",
 //            "/swagger-ui.html",
 //            "/v2/api-docs",
 //            "/webjars/**"
+
             "/v2/api-docs",
             "/configuration/ui",
             "/swagger-resources/**",
@@ -75,3 +78,4 @@ public class WebSecurityConfig {
         return builder.build();
     }
 }
+
